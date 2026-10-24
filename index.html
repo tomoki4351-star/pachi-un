@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08060d">
+<meta name="description" content="パチ運（PACHI-UN）。今日のパチンコ運をおみくじ感覚で占う無料エンタメサイト。">
+<title>パチ運 | 今日の勝負運を占う</title>
+<style>
+:root{--bg:#08060d;--panel:#151019;--gold:#f5cf67;--red:#e22c3d;--muted:#b8aebc;--line:#4d3856;--accent:#f5cf67;--glow:#ffcf43}
+*{box-sizing:border-box}
+body{margin:0;color:#fff5ff;background:radial-gradient(ellipse at 50% -15%,#50200f 0%,#1b0b20 38%,var(--bg) 75%);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;min-height:100vh;overflow-x:hidden;transition:background .5s}
+body[data-tier="rainbow"]{--accent:#fff;--glow:#ff4bdb;background:radial-gradient(ellipse at 50% -15%,#4a1d5a 0%,#170c25 42%,#07060c 78%)}
+body[data-tier="gold"]{--accent:#ffd45b;--glow:#ffad25}
+body[data-tier="red"]{--accent:#ff5968;--glow:#ff243c}
+body[data-tier="green"]{--accent:#75f0a0;--glow:#22dc78}
+body[data-tier="purple"]{--accent:#c9a0ff;--glow:#9e45ff}
+body[data-tier="blue"]{--accent:#75cfff;--glow:#238cff}
+header{display:flex;justify-content:space-between;align-items:center;max-width:1050px;margin:auto;padding:20px 18px}
+.brand{font-weight:1000;letter-spacing:.12em;color:var(--accent);font-size:1.25rem;text-shadow:0 0 18px var(--glow)}
+.brand span{color:#fff}
+.pill{font-size:.75rem;color:var(--accent);border:1px solid #685044;border-radius:99px;padding:7px 10px}
+main{max-width:900px;margin:auto;padding:16px 18px 50px}
+.hero{text-align:center;padding:22px 10px 14px}
+.kicker{color:var(--accent);font-size:.78rem;letter-spacing:.3em;font-weight:800}
+h1{font-size:clamp(2.1rem,7vw,4.1rem);line-height:1.15;margin:12px 0;color:#fff4ff;text-shadow:0 3px 0 #67200c,0 0 25px var(--glow);transition:text-shadow .4s}
+h1 em{font-style:normal;color:var(--accent)}
+.subtitle{color:var(--muted);line-height:1.8;margin:0 auto;max-width:570px}
+.card{position:relative;overflow:hidden;max-width:680px;margin:26px auto 0;padding:28px 20px;border:1px solid var(--accent);border-radius:22px;background:linear-gradient(145deg,#211415,#100c14 65%);box-shadow:0 15px 55px #0009,inset 0 0 35px color-mix(in srgb,var(--glow) 12%,transparent);transition:box-shadow .5s,border-color .5s}
+.card:before{content:"";position:absolute;inset:7px;border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:15px;pointer-events:none}
+.seal{width:96px;height:96px;border:2px solid var(--accent);border-radius:50%;display:grid;place-items:center;margin:0 auto 15px;color:var(--accent);font-size:2.7rem;box-shadow:0 0 24px color-mix(in srgb,var(--glow) 55%,transparent),inset 0 0 15px color-mix(in srgb,var(--glow) 25%,transparent);animation:sealPulse 2.3s infinite}
+@keyframes sealPulse{50%{transform:scale(1.04);filter:brightness(1.3)}}
+.card h2{text-align:center;margin:0 0 7px;color:var(--accent);font-size:1.3rem}
+.card p{text-align:center;color:var(--muted);line-height:1.75;margin:0 auto 20px;max-width:470px}
+button{font:inherit;cursor:pointer}
+.primary{position:relative;display:block;width:100%;max-width:410px;margin:0 auto;padding:17px 18px;border:1px solid #fff0b2;border-radius:12px;color:#260909;font-weight:1000;font-size:1.1rem;letter-spacing:.06em;background:linear-gradient(110deg,#b87918,#fff0a1 48%,#d99b2c);box-shadow:0 6px 0 #6e310b,0 0 28px #ffc34224;transition:transform .15s,filter .15s}
+.primary:hover{filter:brightness(1.12)}.primary:active{transform:translateY(3px);box-shadow:0 3px 0 #6e310b}
+.primary:disabled{opacity:.65;cursor:wait}
+.result{display:none;position:relative;overflow:hidden;margin:24px auto 0;max-width:680px;border:1px solid var(--accent);border-radius:20px;padding:26px 20px;background:linear-gradient(145deg,#28120f,#100b16);text-align:center;box-shadow:0 0 38px color-mix(in srgb,var(--glow) 24%,transparent)}
+.result.show{display:block}
+.result .label{font-size:.8rem;color:var(--accent);letter-spacing:.2em}
+.rank{font-size:clamp(2.4rem,9vw,4rem);font-weight:1000;color:var(--accent);margin:8px 0;text-shadow:0 0 22px var(--glow);position:relative;z-index:2}
+.score{display:inline-block;border:1px solid var(--accent);border-radius:99px;padding:6px 14px;color:var(--accent);font-weight:800;position:relative;z-index:2}
+.result p{line-height:1.9;color:#f0e5f2;position:relative;z-index:2}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;position:relative;z-index:2}
+.stat{border:1px solid #49301e;border-radius:12px;padding:13px 8px;background:#0d090b}
+.stat small{display:block;color:var(--muted);font-size:.74rem;margin-bottom:5px}.stat strong{color:var(--accent);font-size:1.02rem}
+.notice{font-size:.8rem;color:#a99b98;line-height:1.8;text-align:center;max-width:680px;margin:25px auto 0}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:34px auto 0}
+.feature{border:1px solid #3f2b20;background:#120d0f;border-radius:14px;padding:16px 13px}
+.feature .icon{font-size:1.5rem}.feature h3{font-size:.95rem;margin:8px 0;color:var(--accent)}.feature p{font-size:.8rem;line-height:1.7;color:var(--muted);margin:0}
+footer{border-top:1px solid #35231b;text-align:center;padding:22px 15px;color:#887a76;font-size:.75rem;line-height:1.8}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:20;overflow:hidden;display:none}
+#fx.active{display:block}
+.flash{position:absolute;inset:0;background:#fff;animation:flash .65s ease-out forwards}
+@keyframes flash{0%{opacity:0}12%{opacity:.92}30%{opacity:.08}48%{opacity:.72}100%{opacity:0}}
+.beam{position:absolute;left:50%;top:50%;width:160vmax;height:3px;transform-origin:center;background:linear-gradient(90deg,transparent,var(--accent),white,var(--accent),transparent);box-shadow:0 0 20px var(--glow);animation:beam .95s ease-out forwards}
+@keyframes beam{from{transform:translate(-50%,-50%) rotate(var(--rot)) scaleX(0);opacity:1}to{transform:translate(-50%,-50%) rotate(var(--rot)) scaleX(1);opacity:0}}
+.particle{position:absolute;left:var(--x);top:var(--y);font-size:var(--size);color:var(--c);text-shadow:0 0 12px currentColor;animation:burst var(--dur) cubic-bezier(.1,.7,.2,1) forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.1) rotate(0);opacity:0}12%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(var(--spin));opacity:0}}
+.shake{animation:shake .55s ease-in-out}
+@keyframes shake{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-7px)}30%,60%,90%{transform:translateX(7px)}}
+.big-reveal{animation:reveal .9s cubic-bezier(.12,.8,.18,1)}
+@keyframes reveal{0%{transform:scale(.3) rotate(-8deg);filter:brightness(4);opacity:0}55%{transform:scale(1.15) rotate(2deg);filter:brightness(1.8);opacity:1}100%{transform:scale(1);filter:brightness(1)}}
+body[data-tier="rainbow"] .card{animation:rainbowBorder 2s linear infinite}
+@keyframes rainbowBorder{0%{border-color:#ff4d4d;box-shadow:0 0 35px #ff4d4d66}20%{border-color:#ffcf4a;box-shadow:0 0 35px #ffcf4a66}40%{border-color:#5cff8d;box-shadow:0 0 35px #5cff8d66}60%{border-color:#55d8ff;box-shadow:0 0 35px #55d8ff66}80%{border-color:#ce72ff;box-shadow:0 0 35px #ce72ff66}100%{border-color:#ff4d4d;box-shadow:0 0 35px #ff4d4d66}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+@media(max-width:560px){header{padding:16px 14px}.pill{font-size:.67rem}main{padding:8px 13px 36px}.hero{padding-top:20px}.card{padding:23px 15px}.features{grid-template-columns:1fr}.feature{display:grid;grid-template-columns:35px 1fr;column-gap:8px}.feature .icon{grid-row:span 2}.feature h3{margin:0 0 4px}.stats{gap:6px}.stat{padding:12px 4px}.stat strong{font-size:.9rem}}
+
+/* Ver.3 additions */
+.daily{max-width:680px;margin:12px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{background:#120d13;border:1px solid #493321;border-radius:12px;padding:11px 5px;text-align:center}
+.tile small{display:block;color:var(--muted);font-size:.72rem}.tile strong{display:block;color:var(--accent);font-size:.9rem;margin-top:4px}
+.streak{max-width:680px;margin:13px auto;border:1px solid #493321;border-radius:13px;background:#100c12;padding:13px 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.streak strong{color:var(--gold)}.streak span{color:var(--muted);font-size:.8rem}
+.actions{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:17px;position:relative;z-index:2}
+.secondary{min-height:44px;padding:10px 14px;border:1px solid var(--accent);border-radius:10px;background:#160f17;color:var(--accent);font-weight:700}
+.ad-slot{max-width:680px;margin:24px auto;border:1px dashed #5c4b5e;border-radius:12px;padding:15px;text-align:center;color:#95889b;background:#0e0b11;font-size:.78rem}
+.ad-slot strong{display:block;color:#c9b8ce;margin-bottom:4px}
+.content-note{max-width:680px;margin:20px auto;color:#c3b8c7;font-size:.83rem;line-height:1.8}.content-note h2{color:#ffe7a1;font-size:1rem}
+@media(max-width:560px){.daily{gap:5px}.tile{padding:10px 3px}.tile strong{font-size:.78rem}.streak{flex-direction:column}.actions button{flex:1 1 42%}}
+
+</style>
+</head>
+<body>
+<div id="fx" aria-hidden="true"></div>
+<header><div class="brand">🎰 PACHI<span>-UN</span></div><div class="pill">無料・エンタメ占い</div></header>
+<main>
+  <section class="hero">
+    <div class="kicker">YOUR DAILY LUCKY FORTUNE</div>
+    <h1>今日の勝負運を<br><em>占え。</em></h1>
+    <p class="subtitle">運命の歯車が、今日どんな音を奏でるのか。<br>ワンタップで、今日のパチ運をチェック！</p>
+  </section>
+  <section class="card" id="fortuneCard">
+    <div class="seal">運</div>
+    <h2>本日のパチ運おみくじ</h2>
+    <p>心を落ち着けて、ボタンを押そう。<br>運勢によって変化するド派手な演出を見逃すな！</p>
+    <button class="primary" id="draw">✨ 今日の運勢を占う ✨</button>
+  </section>
+  <div class="daily"><div class="tile"><small>今日の日付</small><strong id="todayDate">--</strong></div><div class="tile"><small>ラッキータイム</small><strong id="luckyTime">--</strong></div><div class="tile"><small>今日の心得</small><strong id="dailyTip">予算厳守</strong></div></div>
+  <section class="result" id="result" aria-live="polite">
+    <div class="label">TODAY'S FORTUNE</div>
+    <div class="rank" id="rank">大吉</div>
+    <div class="score" id="score">パチ運 88 / 100</div>
+    <p id="message"></p>
+    <div class="stats">
+      <div class="stat"><small>ラッキーナンバー</small><strong id="number">7</strong></div>
+      <div class="stat"><small>ラッキーカラー</small><strong id="color">ゴールド</strong></div>
+      <div class="stat"><small>今日の心得</small><strong id="tip">予算厳守</strong></div>
+    </div>
+    <div class="actions"><button class="secondary" id="share">結果をシェア</button><button class="secondary" id="copy">結果をコピー</button>
+    <button id="again" style="margin-top:18px;background:transparent;border:1px solid var(--accent);border-radius:9px;color:var(--accent);padding:10px 16px">もう一度占う</button>
+  </section>
+  <div class="streak"><div><strong>🔥 今日もパチ運チェック！</strong><br><span id="visitText">今日の運勢を占って記録しよう。</span></div><span id="streakCount">連続チェック 0日</span></div>
+  <div class="ad-slot"><strong>広告スペース（公開後に設定）</strong>広告審査通過後、ここに広告コードを設置できます。現在は広告は表示されません。</div>
+  <section class="content-note"><h2>パチ運とは？</h2><p>パチ運は、今日の気分を盛り上げるための無料エンタメ占いです。運勢・ラッキーナンバー・ラッキーカラーをおみくじ感覚で楽しめます。実際のパチンコ台の当選確率や勝敗を予測するものではありません。</p><h2>遊技を楽しむために</h2><p>遊技する場合は、事前に予算と時間を決めましょう。予定した上限に達したら終了し、生活費や必要なお金を使わないことが大切です。</p></section>
+  <p class="notice">※この占いは娯楽目的のコンテンツです。実際の当たりやすさ・勝敗・収支を予測するものではありません。遊技する場合は、あらかじめ予算と時間を決め、無理のない範囲で楽しみましょう。</p>
+  <section class="features">
+    <article class="feature"><div class="icon">🌈</div><h3>運勢別の演出</h3><p>最高の運勢ほど、光とエフェクトが豪華に！</p></article>
+    <article class="feature"><div class="icon">🎯</div><h3>ラッキーナンバー</h3><p>今日の運勢にちなんだ数字と現実的な色をチェック。</p></article>
+    <article class="feature"><div class="icon">🛡️</div><h3>予算を決めて楽しもう</h3><p>占いは娯楽。負けを取り返そうとせず、決めた予算を守ろう。</p></article>
+  </section>
+</main>
+<footer>パチ運（PACHI-UN）<br>このサイトはパチンコの結果を予測・保証するものではありません。<br>© PACHI-UN</footer>
+<script>
+const fortunes=[
+{rank:"最高の運勢",tier:"rainbow",min:97,max:100,msg:"虹色の追い風が吹く、今日いちばんのラッキーデー！これはあくまで占いの演出。現実では冷静さと予算を忘れずに。",tip:"冷静第一",weight:2},
+{rank:"大吉",tier:"gold",min:85,max:96,msg:"金色に輝く好調運！気持ちに余裕を持ち、自分のペースで楽しもう。決めた予算を守るのが吉。",tip:"予算厳守",weight:15},
+{rank:"吉",tier:"red",min:70,max:84,msg:"情熱の赤が目印。楽しい時間を過ごすには、焦らず落ち着いた判断が大切。",tip:"落ち着いて",weight:20},
+{rank:"中吉",tier:"green",min:52,max:69,msg:"安定感のある緑の運勢。無理をせず、遊ぶ時間と予算を先に決めておこう。",tip:"時間を決める",weight:25},
+{rank:"小吉",tier:"purple",min:32,max:51,msg:"紫の運勢はマイペースが鍵。深追いはせず、気分転換として楽しもう。",tip:"深追い禁止",weight:22},
+{rank:"末吉",tier:"blue",min:16,max:31,msg:"青の運勢。今日は慎重さを大切に。使う金額を先に決めて、無理せず楽しもう。",tip:"予算を守る",weight:10},
+{rank:"凶",tier:"blue",min:1,max:15,msg:"今日は控えめが吉。占いだけ楽しんで、遊技は別の日にするのも賢い選択。",tip:"休む勇気",weight:6}];
+const colors=["白","黒","グレー","ネイビー","水色","赤","ピンク","オレンジ","黄色","緑","紫","ベージュ","ブラウン","シルバー","ゴールド"];
+const tips=["予算厳守","深追い禁止","時間を決める","冷静第一","休む勇気","無理しない"];
+const $=id=>document.getElementById(id);let busy=false,currentResult=null;
+function todayKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function updateDaily(){
+ const d=new Date();$("todayDate").textContent=`${d.getMonth()+1}/${d.getDate()}`;
+ $("luckyTime").textContent=["朝ごろ","昼ごろ","夕方ごろ","夜ごろ"][Math.floor(Math.random()*4)];
+ $("dailyTip").textContent=tips[(d.getDate()+d.getMonth())%tips.length];
+ try{const key="pachiUnVisits",today=todayKey(),s=JSON.parse(localStorage.getItem(key)||"{}");if(s.last!==today){const y=new Date();y.setDate(y.getDate()-1);const yesterday=`${y.getFullYear()}-${String(y.getMonth()+1).padStart(2,"0")}-${String(y.getDate()).padStart(2,"0")}`;s.streak=s.last===yesterday?(s.streak||0)+1:1;s.last=today;localStorage.setItem(key,JSON.stringify(s))}
+ $("streakCount").textContent=`連続チェック ${s.streak||1}日`;$("visitText").textContent="今日もチェック！毎日コツコツ楽しもう。"
+ }catch(e){$("streakCount").textContent="毎日チェック";$("visitText").textContent="ブラウザによって記録されない場合があります。"}
+}
+function pickFortune(){const total=fortunes.reduce((s,f)=>s+f.weight,0);let n=Math.random()*total;for(const f of fortunes){n-=f.weight;if(n<0)return f}return fortunes[fortunes.length-1]}
+function clearFx(){$("fx").innerHTML="";$("fx").classList.remove("active")}
+function effects(tier){
+ const fx=$("fx");clearFx();fx.classList.add("active");const level={blue:1,purple:2,green:3,red:4,gold:5,rainbow:6}[tier]||1;
+ if(level>=4){const f=document.createElement("div");f.className="flash";fx.appendChild(f)}
+ const beams=[3,6,10,16,24,34][level-1];for(let i=0;i<beams;i++){const b=document.createElement("div");b.className="beam";b.style.setProperty("--rot",i*180/beams+"deg");b.style.animationDelay=Math.random()*.22+"s";fx.appendChild(b)}
+ const symbols=level>=5?["🌈","✨","⭐","💎","🎉","⚡"]:level>=3?["✨","⭐","💫","⚡"]:["✦","✨","★"],count=[12,22,34,50,75,110][level-1];
+ for(let i=0;i<count;i++){const p=document.createElement("span");p.className="particle";p.textContent=symbols[Math.floor(Math.random()*symbols.length)];p.style.setProperty("--x",15+Math.random()*70+"vw");p.style.setProperty("--y",18+Math.random()*64+"vh");p.style.setProperty("--dx",(Math.random()-.5)*100+"vw");p.style.setProperty("--dy",(Math.random()-.5)*100+"vh");p.style.setProperty("--size",12+Math.random()*(level*3+7)+"px");p.style.setProperty("--dur",.7+Math.random()*(level*.25+.5)+"s");p.style.setProperty("--spin",(Math.random()-.5)*900+"deg");p.style.setProperty("--c",tier==="rainbow"?["#ff4d4d","#ffcf4a","#5cff8d","#55d8ff","#ce72ff"][i%5]:"var(--accent)");p.style.animationDelay=Math.random()*.25+"s";fx.appendChild(p)}
+ setTimeout(clearFx,level>=5?2600:level>=3?1900:1300)
+}
+function shareText(){if(!currentResult)return "";return `🎰 パチ運｜今日の運勢は「${currentResult.rank}」！\nパチ運スコア：${currentResult.score}/100\nラッキーナンバー：${currentResult.number}\nラッキーカラー：${currentResult.color}\n今日の心得：${currentResult.tip}\n\n占いはエンタメ！勝敗を予測するものではありません。\n${location.href}`}
+async function draw(){
+ if(busy)return;busy=true;$("draw").disabled=true;$("again").disabled=true;$("share").disabled=true;$("copy").disabled=true;
+ const f=pickFortune();document.body.dataset.tier=f.tier;$("result").classList.remove("show");const card=$("fortuneCard");card.classList.remove("shake");void card.offsetWidth;card.classList.add("shake");effects(f.tier);
+ const delay={blue:450,purple:650,green:850,red:1050,gold:1350,rainbow:1750}[f.tier]||450;
+ setTimeout(()=>{const score=Math.floor(Math.random()*(f.max-f.min+1))+f.min,number=Math.floor(Math.random()*9)+1,color=colors[Math.floor(Math.random()*colors.length)];currentResult={rank:f.rank,score,number,color,tip:f.tip};
+ $("rank").textContent=f.rank;$("score").textContent=`パチ運 ${score} / 100`;$("message").textContent=f.msg;$("number").textContent=number;$("color").textContent=color;$("tip").textContent=f.tip;
+ $("result").classList.add("show");$("result").classList.remove("big-reveal");void $("result").offsetWidth;$("result").classList.add("big-reveal");$("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+ $("draw").disabled=false;$("again").disabled=false;$("share").disabled=false;$("copy").disabled=false;busy=false
+ },delay)
+}
+async function shareResult(){const text=shareText();if(!text)return;try{if(navigator.share)await navigator.share({title:"パチ運｜今日の占い",text});else{await navigator.clipboard.writeText(text);alert("シェア用テキストをコピーしたよ！SNSに貼り付けてね。")}}catch(e){if(e.name!=="AbortError"){try{await navigator.clipboard.writeText(text);alert("シェア用テキストをコピーしたよ！")}catch(_){alert(text)}}}}
+async function copyResult(){const text=shareText();if(!text)return;try{await navigator.clipboard.writeText(text);$("copy").textContent="コピーしました！";setTimeout(()=>$("copy").textContent="結果をコピー",1600)}catch(e){window.prompt("以下をコピーしてね",text)}}
+$("draw").addEventListener("click",draw);$("again").addEventListener("click",draw);$("share").addEventListener("click",shareResult);$("copy").addEventListener("click",copyResult);updateDaily();
+</script>
+</body>
+</html>
